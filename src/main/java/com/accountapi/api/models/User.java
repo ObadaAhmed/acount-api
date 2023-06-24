@@ -20,12 +20,12 @@ import java.util.List;
 public class User implements UserDetails {
     private String username;
     private String password;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
+    private String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override

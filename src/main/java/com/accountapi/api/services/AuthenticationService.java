@@ -24,6 +24,7 @@ public class AuthenticationService {
                     new UsernamePasswordAuthenticationToken(
                             authRequest.getUsername(),
                             authRequest.getPassword()
+
                     )
             );
            var user = userRepository.findByUsername(authRequest.getUsername());

@@ -1,5 +1,6 @@
 package com.accountapi.api.models.request;
 
+import com.accountapi.api.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -14,4 +15,6 @@ public class AuthRequest {
     private String username;
     @NotNull
     private String password;
+    private Role role;
+
 }
