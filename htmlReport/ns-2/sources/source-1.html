@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AccountController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.accountapi.api.Controller</a>
+</div>
+
+<h1>Coverage Summary for Class: AccountController (com.accountapi.api.Controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AccountController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.6%
+  </span>
+  <span class="absValue">
+    (1/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.accountapi.api.Controller;
+&nbsp;
+&nbsp;import com.accountapi.api.constans.Constans;
+&nbsp;import com.accountapi.api.constans.Message;
+&nbsp;import com.accountapi.api.models.Account;
+&nbsp;import com.accountapi.api.models.request.StatementRequestDto;
+&nbsp;import com.accountapi.api.models.response.ErrorResponse;
+&nbsp;import com.accountapi.api.models.response.StatementResponse;
+&nbsp;import com.accountapi.api.services.AccountService;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.repository.query.Param;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Optional;
+&nbsp;import org.slf4j.Logger;
+&nbsp;@RestController
+<b class="fc">&nbsp;public class AccountController {</b>
+&nbsp;    @Autowired
+&nbsp;    private AccountService accountService;
+&nbsp;    @GetMapping(&quot;/admin/fetch-statement&quot;)
+&nbsp;    public List&lt;Account&gt; getStatements(@Param(&quot;id&quot;) String id) {
+<b class="nc">&nbsp;        return accountService.fetchAllAccounts(id);</b>
+&nbsp;    }
+&nbsp;    @GetMapping(&quot;/admin/account-details/{id}&quot;)
+&nbsp;    public Account getAccountDetails(@PathVariable(&quot;id&quot;) Long id) throws IllegalAccessException {
+<b class="nc">&nbsp;        Optional&lt;Account&gt; account = accountService.fetchAccountDetails(id);</b>
+<b class="nc">&nbsp;        if (account.isPresent()) {</b>
+<b class="nc">&nbsp;            return account.get();</b>
+&nbsp;        }
+&nbsp;        // should handle error messsage here
+<b class="nc">&nbsp;        throw new IllegalAccessException(&quot;No account with account id&quot;);</b>
+&nbsp;    }
+&nbsp;    @GetMapping(&quot;/admin/statement&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; getStatements(
+&nbsp;            @RequestParam(required = false) Long accountId,
+&nbsp;            @RequestParam(required = false) String fromDate,
+&nbsp;            @RequestParam(required = false) String toDate,
+&nbsp;            @RequestParam(required = false) Double fromAmount,
+&nbsp;            @RequestParam(required = false) Double toAmount
+&nbsp;        ){
+<b class="nc">&nbsp;        StatementRequestDto requestDto = new StatementRequestDto(accountId , fromDate , toDate , fromAmount , toAmount);</b>
+<b class="nc">&nbsp;        return getResponseEntity(requestDto);</b>
+&nbsp;    }
+&nbsp;    @GetMapping(&quot;/user/statements/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; getUserStatements(@PathVariable Long id) {
+<b class="nc">&nbsp;        StatementRequestDto statementRequestDto = new StatementRequestDto(id);</b>
+<b class="nc">&nbsp;        return getResponseEntity(statementRequestDto);</b>
+&nbsp;    }
+&nbsp;    private ResponseEntity&lt;?&gt; getResponseEntity(StatementRequestDto statementRequestDto) {
+<b class="nc">&nbsp;        Map&lt;String, Object&gt; resultMap = accountService.fetchAccountStatements(statementRequestDto);</b>
+<b class="nc">&nbsp;        if (Constans.STATUS_ERROR.equalsIgnoreCase(resultMap.get(Constans.STR_STATUS).toString())) {</b>
+&nbsp;            return ResponseEntity
+<b class="nc">&nbsp;                    .badRequest()</b>
+<b class="nc">&nbsp;                    .body(new ErrorResponse(resultMap.get(Constans.STR_STATUS).toString(),</b>
+<b class="nc">&nbsp;                            resultMap.get(Constans.STR_ERROR_KEY).toString()));</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (resultMap.get(Constans.RESPONSE_STATEMENT_DTO) instanceof StatementResponse) {</b>
+<b class="nc">&nbsp;            return ResponseEntity.ok( (StatementResponse) resultMap.get(Constans.RESPONSE_STATEMENT_DTO));</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return ResponseEntity.ofNullable(new ErrorResponse(Constans.STATUS_ERROR , Message.FAILURE_FETCHING_STATEMENT));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-24 16:19</div>
+</div>
+</body>
+</html>

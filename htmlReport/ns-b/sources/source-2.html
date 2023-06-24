@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AuthenticationService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.accountapi.api.services</a>
+</div>
+
+<h1>Coverage Summary for Class: AuthenticationService (com.accountapi.api.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AuthenticationService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (1/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.accountapi.api.services;
+&nbsp;
+&nbsp;import com.accountapi.api.models.User;
+&nbsp;import com.accountapi.api.models.request.AuthRequest;
+&nbsp;import com.accountapi.api.models.response.AuthResponse;
+&nbsp;import com.accountapi.api.repositories.UserRepository;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.security.authentication.AuthenticationManager;
+&nbsp;import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;public class AuthenticationService {
+&nbsp;
+&nbsp;    private final JwtService jwtService;
+&nbsp;    private final AuthenticationManager authenticationManager;
+&nbsp;    private final UserRepository userRepository;
+&nbsp;    public AuthResponse authenticate(AuthRequest authRequest) {
+<b class="nc">&nbsp;            authenticationManager.authenticate(</b>
+&nbsp;                    new UsernamePasswordAuthenticationToken(
+<b class="nc">&nbsp;                            authRequest.getUsername(),</b>
+<b class="nc">&nbsp;                            authRequest.getPassword()</b>
+&nbsp;                    )
+&nbsp;            );
+<b class="nc">&nbsp;           var user = userRepository.findByUsername(authRequest.getUsername());</b>
+<b class="nc">&nbsp;           String token = jwtService.generateToken(user);</b>
+<b class="nc">&nbsp;           return AuthResponse.builder()</b>
+<b class="nc">&nbsp;                   .access_token(token)</b>
+<b class="nc">&nbsp;                   .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public User getUserDetails(String username) {
+<b class="nc">&nbsp;        return userRepository.findByUsername(username);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-24 16:19</div>
+</div>
+</body>
+</html>

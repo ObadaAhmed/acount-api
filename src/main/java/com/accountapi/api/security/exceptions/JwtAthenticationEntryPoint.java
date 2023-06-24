@@ -33,9 +33,9 @@ public class JwtAthenticationEntryPoint implements AuthenticationEntryPoint {
         catch (Exception e){
             logger.error("Error mapping the errorResponse " + e.getMessage());
             body.setApplicationMessage("JWT authentication failure");
-            body.setErrorMessage("JWT authentication failure");
+            body.setErrorMessage("UnAuthorized");
             body.setLocalizedErrorMessage("JWT authentication failure");
-            body.setErrorCode("403");
+            body.setErrorCode("401");
         }
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);

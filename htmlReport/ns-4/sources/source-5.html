@@ -1,0 +1,151 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MessageResolverService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.accountapi.api.exception</a>
+</div>
+
+<h1>Coverage Summary for Class: MessageResolverService (com.accountapi.api.exception)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MessageResolverService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    6.2%
+  </span>
+  <span class="absValue">
+    (1/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.accountapi.api.exception;
+&nbsp;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.context.MessageSource;
+&nbsp;import org.springframework.context.NoSuchMessageException;
+&nbsp;import org.springframework.context.i18n.LocaleContextHolder;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.validation.FieldError;
+&nbsp;
+&nbsp;import java.util.Locale;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class MessageResolverService {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private MessageSource messageSource;
+&nbsp;
+&nbsp;    public String resolveLocalizedErrorMessage(BaseWebApplicationException ex) {
+<b class="nc">&nbsp;        Locale currentLocale =  LocaleContextHolder.getLocale();</b>
+<b class="nc">&nbsp;        return resolveLocalizedErrorMessage(ex, currentLocale);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String resolveLocalizedErrorMessage(BaseWebApplicationException ex, Locale locale) {
+<b class="nc">&nbsp;        String localizedErrorMessage = null;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            localizedErrorMessage = messageSource.getMessage(ex.getErrorMessageKey(), ex.getVars(), locale);</b>
+<b class="nc">&nbsp;        } catch (NoSuchMessageException e1) {</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                localizedErrorMessage = messageSource.getMessage(ex.getDefaultErrorMessageKey(), null, locale);</b>
+<b class="nc">&nbsp;            } catch (NoSuchMessageException e2) {</b>
+&nbsp;
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;        //If the message was not found, return the most accurate field error code instead.
+&nbsp;        //You can remove this check if you prefer to get the default error message.
+<b class="nc">&nbsp;        if (localizedErrorMessage == null) {</b>
+<b class="nc">&nbsp;            localizedErrorMessage = ex.getErrorMessage();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return localizedErrorMessage;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String resolveLocalizedErrorMessage(FieldError fieldError) {
+<b class="nc">&nbsp;        Locale currentLocale =  LocaleContextHolder.getLocale();</b>
+<b class="nc">&nbsp;        String localizedErrorMessage = messageSource.getMessage(fieldError, currentLocale);</b>
+&nbsp;
+<b class="nc">&nbsp;        return localizedErrorMessage;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-24 16:19</div>
+</div>
+</body>
+</html>

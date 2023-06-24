@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > BaseWebApplicationException</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.accountapi.api.exception</a>
+</div>
+
+<h1>Coverage Summary for Class: BaseWebApplicationException (com.accountapi.api.exception)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BaseWebApplicationException</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.accountapi.api.exception;
+&nbsp;
+&nbsp;
+&nbsp;public abstract class BaseWebApplicationException extends RuntimeException {
+&nbsp;
+<b class="nc">&nbsp;    private final String defaultErrorMessageKey = &quot;ex.default.system.error&quot;;</b>
+&nbsp;    private final int status;
+&nbsp;    private final String errorCode;
+&nbsp;    private final String errorMessageKey;
+&nbsp;    private final String errorMessage;
+&nbsp;    private final String applicationMessage;
+&nbsp;    private final Object[] vars;
+&nbsp;
+&nbsp;    public BaseWebApplicationException(int httpStatus, String errorCode, String errorMessageKey) {
+<b class="nc">&nbsp;        this(httpStatus, errorCode, errorMessageKey, null, null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BaseWebApplicationException(int httpStatus, String errorCode, String errorMessageKey, String applicationMessage) {
+<b class="nc">&nbsp;        this(httpStatus, errorCode, errorMessageKey, null, applicationMessage);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BaseWebApplicationException(int httpStatus, String errorCode, String errorMessageKey, String errorMessage, String applicationMessage, Object[] vars) {
+<b class="nc">&nbsp;        super(errorMessageKey);</b>
+<b class="nc">&nbsp;        this.status = httpStatus;</b>
+<b class="nc">&nbsp;        this.errorMessageKey = errorMessageKey;</b>
+<b class="nc">&nbsp;        this.errorMessage = errorMessage;</b>
+<b class="nc">&nbsp;        this.errorCode = errorCode;</b>
+<b class="nc">&nbsp;        this.applicationMessage = applicationMessage;</b>
+<b class="nc">&nbsp;        this.vars = vars;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BaseWebApplicationException(int httpStatus, String errorCode, String errorMessageKey, String errorMessage, String applicationMessage) {
+<b class="nc">&nbsp;        super(errorMessage);</b>
+<b class="nc">&nbsp;        this.status = httpStatus;</b>
+<b class="nc">&nbsp;        this.errorMessageKey = errorMessageKey;</b>
+<b class="nc">&nbsp;        this.errorMessage = errorMessage;</b>
+<b class="nc">&nbsp;        this.errorCode = errorCode;</b>
+<b class="nc">&nbsp;        this.applicationMessage = applicationMessage;</b>
+<b class="nc">&nbsp;        this.vars = null;</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    public ErrorResponse getErrorResponse() {
+<b class="nc">&nbsp;        ErrorResponse response = new ErrorResponse();</b>
+<b class="nc">&nbsp;        response.setErrorCode(errorCode);</b>
+<b class="nc">&nbsp;        response.setApplicationMessage(applicationMessage);</b>
+<b class="nc">&nbsp;        response.setErrorMessage(errorMessage);</b>
+<b class="nc">&nbsp;        response.setHttpResponseCode(status);</b>
+<b class="nc">&nbsp;        return response;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;	public int getStatus() {
+<b class="nc">&nbsp;		return status;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;    public String getErrorCode() {
+<b class="nc">&nbsp;        return errorCode;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getErrorMessageKey() {
+<b class="nc">&nbsp;        return errorMessageKey;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getErrorMessage() {
+<b class="nc">&nbsp;        return errorMessage;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getApplicationMessage() {
+<b class="nc">&nbsp;        return applicationMessage;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getDefaultErrorMessageKey() {
+<b class="nc">&nbsp;        return defaultErrorMessageKey;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Object[] getVars() {
+<b class="nc">&nbsp;        return vars;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-24 16:19</div>
+</div>
+</body>
+</html>

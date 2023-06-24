@@ -17,7 +17,7 @@ public class Statement {
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id" , referencedColumnName = "id" ,nullable = false)
-    private Account account;
+    private Account account_id;
     @Column(name = "datefield")
     private String dateField;
     private double amount;

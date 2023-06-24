@@ -1,15 +1,12 @@
 package com.accountapi.api.services;
 
-import com.accountapi.api.models.Role;
 import com.accountapi.api.models.User;
 import com.accountapi.api.models.request.AuthRequest;
-import com.accountapi.api.models.request.RegisterRequest;
 import com.accountapi.api.models.response.AuthResponse;
 import com.accountapi.api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +21,6 @@ public class AuthenticationService {
                     new UsernamePasswordAuthenticationToken(
                             authRequest.getUsername(),
                             authRequest.getPassword()
-
                     )
             );
            var user = userRepository.findByUsername(authRequest.getUsername());

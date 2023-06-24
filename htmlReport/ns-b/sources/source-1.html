@@ -1,0 +1,217 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AccountService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.accountapi.api.services</a>
+</div>
+
+<h1>Coverage Summary for Class: AccountService (com.accountapi.api.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AccountService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    42.6%
+  </span>
+  <span class="absValue">
+    (26/61)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.accountapi.api.services;
+&nbsp;import com.accountapi.api.constans.Constans;
+&nbsp;import com.accountapi.api.constans.Message;
+&nbsp;import com.accountapi.api.models.Account;
+&nbsp;import com.accountapi.api.models.Statement;
+&nbsp;import com.accountapi.api.models.request.StatementRequestDto;
+&nbsp;import com.accountapi.api.models.response.StatementResponse;
+&nbsp;import com.accountapi.api.repositories.AccountRepository;
+&nbsp;import com.accountapi.api.repositories.StatementRepository;
+&nbsp;import com.accountapi.api.utility.DateUtility;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.util.*;
+&nbsp;@Service
+<b class="fc">&nbsp;public class AccountService {</b>
+<b class="fc">&nbsp;    Logger logger = LoggerFactory.getLogger(AccountService.class);</b>
+&nbsp;    @Autowired
+&nbsp;    private AccountRepository accountRepository;
+&nbsp;    @Autowired
+&nbsp;    private StatementRepository statementRepository;
+&nbsp;    public List&lt;Account&gt; fetchAllAccounts(String accountId) {
+<b class="fc">&nbsp;        return accountRepository.findAll();</b>
+&nbsp;    }
+&nbsp;    public Optional&lt;Account&gt; fetchAccountDetails(Long accountId) {
+&nbsp;        try {
+<b class="fc">&nbsp;            Optional&lt;Account&gt; account = accountRepository.findById(accountId);</b>
+<b class="fc">&nbsp;            if (account.isPresent()) {</b>
+<b class="fc">&nbsp;                logger.info(&quot;Account details fetched successfully for accountId: {}&quot;, accountId);</b>
+<b class="fc">&nbsp;                return account;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }catch (Exception e) {</b>
+<b class="nc">&nbsp;            logger.error(&quot;Error occurred while fetching account details for accountId: {}&quot;, accountId, e);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return Optional.empty();</b>
+&nbsp;    }
+&nbsp;    public Map&lt;String, Object&gt; fetchAccountStatements(StatementRequestDto Dto) {
+<b class="fc">&nbsp;            Map&lt;String, Object&gt; resultMap = new HashMap&lt;&gt;();</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            if (Dto.getAccountId() == null || Dto.getAccountId() == 0) {</b>
+<b class="fc">&nbsp;                 resultMap.put(Constans.STR_STATUS , Constans.STATUS_ERROR);</b>
+<b class="fc">&nbsp;                 resultMap.put(Constans.STR_ERROR_KEY , Message.REQUIRED_ACCOUNT_ID );</b>
+<b class="fc">&nbsp;                 return resultMap;</b>
+&nbsp;            }
+&nbsp;            LocalDate fromDateObj;
+&nbsp;            LocalDate toDateObj;
+&nbsp;
+<b class="fc">&nbsp;            if (Dto.getFromDate() != null &amp;&amp; DateUtility.isNotValidDateFormat(Dto.getFromDate()) || Dto.getToDate() != null &amp;&amp; DateUtility.isNotValidDateFormat(Dto.getToDate())) {</b>
+<b class="fc">&nbsp;                resultMap.put(Constans.STR_STATUS , Constans.STATUS_ERROR);</b>
+<b class="fc">&nbsp;                resultMap.put(Constans.STR_ERROR_KEY , Message.INVALID_DATE_FORMAT );</b>
+<b class="fc">&nbsp;                return resultMap;</b>
+&nbsp;            }else {
+<b class="fc">&nbsp;                fromDateObj = DateUtility.parseDate(Dto.getFromDate(), LocalDate.now().minusMonths(3));</b>
+<b class="fc">&nbsp;                toDateObj = DateUtility.parseDate(Dto.getToDate(), LocalDate.now());</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            if (fromDateObj.isAfter(toDateObj)) {</b>
+<b class="fc">&nbsp;                resultMap.put(Constans.STR_STATUS , Constans.STATUS_ERROR);</b>
+<b class="fc">&nbsp;                resultMap.put(Constans.STR_ERROR_KEY , Message.INVALID_DATE_RANGE );</b>
+<b class="fc">&nbsp;                return resultMap;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            if (Dto.getFromAmount() != null &amp;&amp; Dto.getToAmount() != null &amp;&amp; Dto.getFromAmount() &gt; Dto.getToAmount()) {</b>
+<b class="fc">&nbsp;                resultMap.put(Constans.STR_STATUS , Constans.STATUS_ERROR);</b>
+<b class="fc">&nbsp;                resultMap.put(Constans.STR_ERROR_KEY , Message.INVALID_AMOUNT_RANGE );</b>
+<b class="fc">&nbsp;                return resultMap;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            Optional&lt;List&lt;Statement&gt;&gt; accountStatements = statementRepository.findStatementsByAccount_Id(Dto.getAccountId());</b>
+<b class="nc">&nbsp;            if (accountStatements.isEmpty()) {</b>
+<b class="nc">&nbsp;                resultMap.put(Constans.STR_STATUS , Constans.STATUS_ERROR);</b>
+<b class="nc">&nbsp;                resultMap.put(Constans.STR_ERROR_KEY , Message.NO_STATEMENTS_FOUND );</b>
+<b class="nc">&nbsp;                return resultMap;</b>
+&nbsp;            }
+&nbsp;            List&lt;Statement&gt; filteredStatements;
+<b class="nc">&nbsp;            filteredStatements = filterStatementsByDate(accountStatements.get() , fromDateObj , toDateObj);</b>
+<b class="nc">&nbsp;            filteredStatements = filterStatementsByAmount(filteredStatements , Dto.getFromAmount() , Dto.getToAmount());</b>
+<b class="nc">&nbsp;            resultMap.put(Constans.STR_STATUS , Constans.STATUS_SUCCESS);</b>
+<b class="nc">&nbsp;            resultMap.put(Constans.RESPONSE_STATEMENT_DTO , new StatementResponse(filteredStatements));</b>
+<b class="nc">&nbsp;            return resultMap;</b>
+<b class="nc">&nbsp;        }catch (Exception e){</b>
+<b class="nc">&nbsp;            logger.error(e.getMessage());</b>
+<b class="nc">&nbsp;            resultMap.put(Constans.STR_STATUS , Constans.STATUS_ERROR);</b>
+<b class="nc">&nbsp;            resultMap.put(Constans.STR_ERROR_KEY , Message.FAILURE_FETCHING_STATEMENT );</b>
+<b class="nc">&nbsp;            return resultMap;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    private List&lt;Statement&gt; filterStatementsByDate(List&lt;Statement&gt; statements, LocalDate fromDate, LocalDate toDate) {
+<b class="nc">&nbsp;        List&lt;Statement&gt; filteredStatements = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (Statement statement : statements) {</b>
+<b class="nc">&nbsp;            LocalDate statementDate = LocalDate.parse(statement.getDateField(), DateUtility.DATE_FORMATTER);</b>
+<b class="nc">&nbsp;            if (!statementDate.isBefore(fromDate) &amp;&amp; !statementDate.isAfter(toDate)) {</b>
+<b class="nc">&nbsp;                filteredStatements.add(statement);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return filteredStatements;</b>
+&nbsp;    }
+&nbsp;    private List&lt;Statement&gt; filterStatementsByAmount(List&lt;Statement&gt; statements, Double fromAmount, Double toAmount) {
+<b class="nc">&nbsp;        List&lt;Statement&gt; filteredStatements = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        if (fromAmount != null &amp;&amp; toAmount != null) {</b>
+<b class="nc">&nbsp;            for (Statement statement : statements) {</b>
+<b class="nc">&nbsp;                Double amount = statement.getAmount();</b>
+<b class="nc">&nbsp;                if ((fromAmount == null || amount &gt;= fromAmount) &amp;&amp; (toAmount == null || amount &lt;= toAmount)) {</b>
+<b class="nc">&nbsp;                    filteredStatements.add(statement);</b>
+&nbsp;                }
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            return filteredStatements;</b>
+&nbsp;        }else {
+<b class="nc">&nbsp;            return statements;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-24 16:19</div>
+</div>
+</body>
+</html>
