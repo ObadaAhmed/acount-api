@@ -15,9 +15,10 @@ public class Statement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER
+    )
     @JoinColumn(name = "account_id" , referencedColumnName = "id" ,nullable = false)
-    private Account account_id;
+    private Account account;
     @Column(name = "datefield")
     private String dateField;
     private double amount;

@@ -94,7 +94,7 @@ public class JwtService {
         } catch (ExpiredJwtException e) {
             logger.info("JWT token is expired: {}", e.getMessage());
             httpServletRequest.setAttribute("errorCode", "401");
-            httpServletRequest.setAttribute("errorMessage", "JWT token is expired");
+            httpServletRequest.setAttribute("errorMessage", "JWT token is expired!!!!!!");
         } catch (UnsupportedJwtException e) {
             logger.error("JWT token is unsupported: {}", e.getMessage());
             httpServletRequest.setAttribute("errorCode", "401");

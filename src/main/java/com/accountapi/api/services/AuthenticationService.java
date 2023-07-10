@@ -6,6 +6,7 @@ import com.accountapi.api.models.response.AuthResponse;
 import com.accountapi.api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     public AuthResponse authenticate(AuthRequest authRequest) {
+        try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authRequest.getUsername(),
@@ -28,6 +30,11 @@ public class AuthenticationService {
            return AuthResponse.builder()
                    .access_token(token)
                    .build();
+
+        }catch (Exception e) {
+            System.out.println("Exception in authenticate method : " + e);
+            throw e;
+        }
     }
 
     public User getUserDetails(String username) {

@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
+
 @RestController
 public class AccountController {
     @Autowired
     private AccountService accountService;
+    private static final Pattern ID_PATTERN = Pattern.compile("\\d+");
     @GetMapping("/admin/statement")
     public ResponseEntity<?> getStatements(
             @RequestParam(required = false) Long accountId,
@@ -30,12 +33,18 @@ public class AccountController {
         return getResponseEntity(requestDto);
     }
     @GetMapping("/user/statements/{id}")
-    public ResponseEntity<?> getUserStatements(@PathVariable Long id) {
-        StatementRequestDto statementRequestDto = new StatementRequestDto(id);
+    public ResponseEntity<?> getUserStatements(@PathVariable String id) {
+        if (!ID_PATTERN.matcher(id).matches()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponse(Constans.STATUS_ERROR, Message.INVALID_ID_FORMAT));
+        }
+        StatementRequestDto statementRequestDto = new StatementRequestDto(Long.parseLong(id));
         return getResponseEntity(statementRequestDto);
     }
     private ResponseEntity<?> getResponseEntity(StatementRequestDto statementRequestDto) {
         Map<String, Object> resultMap = accountService.fetchAccountStatements(statementRequestDto);
+
         if (Constans.STATUS_ERROR.equalsIgnoreCase(resultMap.get(Constans.STR_STATUS).toString())) {
             return ResponseEntity
                     .badRequest()

@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -28,8 +30,6 @@ public class ExceptionHandlers {
 
     protected static Logger logger = LoggerFactory.getLogger(ExceptionHandlers.class);
 
-    @Autowired
-    HttpServletRequest httpServletRequest;
 
     @Autowired
     private MessageResolverService messageResolverService;
@@ -43,8 +43,7 @@ public class ExceptionHandlers {
         errorResponse.setErrorMessage(messageResolverService.resolveLocalizedErrorMessage(ex));
         logger.debug("baseWebAppException setErrorMessage:" + errorResponse.getErrorMessage());
         logger.debug("baseWebAppException ex:" + ex);
-        errorResponse.setLocalizedErrorMessage(messageResolverService.resolveLocalizedErrorMessage(ex, new Locale("ar")));
-        return errorResponse;
+            return errorResponse;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -58,8 +57,7 @@ public class ExceptionHandlers {
                 HttpStatus.BAD_REQUEST.value(), "001", "ex.method.args.invalid", "Validation Error", "The data passed in the request was invalid. Please check and resubmit");
         ErrorResponse response = exception.getErrorResponse();
         response.setErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception));
-        response.setLocalizedErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception, new Locale("ar")));
-        response.setValidationErrors(processFieldErrors(fieldErrors));
+         response.setValidationErrors(processFieldErrors(fieldErrors));
         servletResponse.setStatus(exception.getStatus());
         return response;
     }
@@ -72,19 +70,27 @@ public class ExceptionHandlers {
                 HttpStatus.INTERNAL_SERVER_ERROR.value(), "001", "ex.rest.client.error", "Connection Error", "Error connecting with remote service");
         ErrorResponse response = exception.getErrorResponse();
         response.setErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception));
-        response.setLocalizedErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception, new Locale("ar")));
-        servletResponse.setStatus(exception.getStatus());
+         servletResponse.setStatus(exception.getStatus());
         return response;
     }
-    @ExceptionHandler(ExpiredJwtException.class)
-    public @ResponseBody ErrorResponse expiredJwtException(HttpServletResponse servletResponse, ExpiredJwtException ex) {
+    @ExceptionHandler(BadCredentialsException.class)
+    public @ResponseBody ErrorResponse BadCreadientialsException(HttpServletResponse servletResponse, BadCredentialsException ex) {
         logException(ex);
         ApplicationRuntimeException exception = new ApplicationRuntimeException(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(), "001", "ex.rest.client.error", "Connection Error", "Error connecting with remote service");
         ErrorResponse response = exception.getErrorResponse();
         response.setErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception));
-        response.setLocalizedErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception, new Locale("ar")));
-        servletResponse.setStatus(exception.getStatus());
+         servletResponse.setStatus(exception.getStatus());
+        return response;
+    }
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public @ResponseBody ErrorResponse UserNotFoundException(HttpServletResponse servletResponse, InternalAuthenticationServiceException ex) {
+        logException(ex);
+        ApplicationRuntimeException exception = new ApplicationRuntimeException(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), "004", "ex.rest.client.error", "no records found for specified user", "User not found");
+        ErrorResponse response = exception.getErrorResponse();
+        response.setErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception));
+         servletResponse.setStatus(exception.getStatus());
         return response;
     }
 
@@ -93,11 +99,10 @@ public class ExceptionHandlers {
     ErrorResponse httpMethod(HttpServletResponse servletResponse, Exception ex) {
         logException(ex);
         ApplicationRuntimeException exception = new ApplicationRuntimeException(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(), "002", "ex.http.request.notSupported", "Request Error", "Http Content-Type or Method Not Supported");
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), "005", "ex.http.request.notSupported", "Request Error", "Http Content-Type or Method Not Supported");
         ErrorResponse response = exception.getErrorResponse();
         response.setErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception));
-        response.setLocalizedErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception, new Locale("ar")));
-        servletResponse.setStatus(exception.getStatus());
+         servletResponse.setStatus(exception.getStatus());
         return response;
 
     }
@@ -107,10 +112,9 @@ public class ExceptionHandlers {
     ErrorResponse otherThrowable(HttpServletResponse servletResponse, Throwable e) {
         logException(e);
         ApplicationRuntimeException exception = new ApplicationRuntimeException(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(), "003", "ex.default.system.error", "System Error", "System Error");
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), "006", "ex.default.system.error", "System Error", "System Error");
         ErrorResponse response = exception.getErrorResponse();
         response.setErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception));
-        response.setLocalizedErrorMessage(messageResolverService.resolveLocalizedErrorMessage(exception, new Locale("ar")));
         servletResponse.setStatus(exception.getStatus());
         return response;
 

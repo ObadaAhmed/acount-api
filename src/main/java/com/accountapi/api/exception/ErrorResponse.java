@@ -17,7 +17,6 @@ public class ErrorResponse {
 
     private String errorCode;
     private String errorMessage;
-    private String localizedErrorMessage;
     private String applicationMessage;
     @JsonIgnore
     private int httpResponseCode;
@@ -47,13 +46,4 @@ public class ErrorResponse {
     public void setErrorMessage(String consumerMessage) {
         this.errorMessage = consumerMessage;
     }
-
-    public String getLocalizedErrorMessage() {
-        return localizedErrorMessage;
-    }
-
-    public void setLocalizedErrorMessage(String localizedErrorMessage) {
-        this.localizedErrorMessage = localizedErrorMessage;
-    }
-
 }

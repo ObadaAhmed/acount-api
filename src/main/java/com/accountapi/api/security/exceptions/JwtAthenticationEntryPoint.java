@@ -27,14 +27,12 @@ public class JwtAthenticationEntryPoint implements AuthenticationEntryPoint {
         try {
             body.setApplicationMessage(request.getAttribute("errorMessage").toString() + "");
             body.setErrorMessage(request.getAttribute("errorMessage").toString() + "");
-            body.setLocalizedErrorMessage(request.getAttribute("errorMessage").toString() + "");
-            body.setErrorCode(request.getAttribute("errorCode").toString() + "");
+             body.setErrorCode(request.getAttribute("errorCode").toString() + "");
         }
         catch (Exception e){
             logger.error("Error mapping the errorResponse " + e.getMessage());
             body.setApplicationMessage("JWT authentication failure");
             body.setErrorMessage("UnAuthorized");
-            body.setLocalizedErrorMessage("JWT authentication failure");
             body.setErrorCode("401");
         }
         final ObjectMapper mapper = new ObjectMapper();

@@ -20,9 +20,7 @@ import java.util.List;
 public class User implements UserDetails {
     private String username;
     private String password;
-
     private String role;
-
     private String token;
 
     public User(String username , String password , String role) {

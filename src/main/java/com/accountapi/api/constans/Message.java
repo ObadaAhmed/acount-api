@@ -7,4 +7,5 @@ public class Message {
     public static final String INVALID_AMOUNT_RANGE = "Invalid amount range. 'fromAmount' cannot be greater than 'toAmount'.";
     public static final String NO_STATEMENTS_FOUND = "No statements found.";
     public static final String FAILURE_FETCHING_STATEMENT = "Failed to fetch account statements.";
+    public static final String INVALID_ID_FORMAT = "Invalid ID format. Only numeric IDs are allowed.";
 }

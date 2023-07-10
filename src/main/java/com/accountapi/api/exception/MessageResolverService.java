@@ -42,7 +42,6 @@ public class MessageResolverService {
     public String resolveLocalizedErrorMessage(FieldError fieldError) {
         Locale currentLocale =  LocaleContextHolder.getLocale();
         String localizedErrorMessage = messageSource.getMessage(fieldError, currentLocale);
-
         return localizedErrorMessage;
     }
 }
